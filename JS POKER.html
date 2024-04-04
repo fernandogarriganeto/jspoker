@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        
+        
+        body {
+            font-family: "Young Serif", serif;
+            font-weight: 400;
+            font-style: normal;
+            background-color: green;
+           
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: white;
+            -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75); 
+            height: 50px;
+            line-height: 50px;
+        }
+
+        #pontuacao {           
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            color: #FFF;                        
+        }
+
+        #pontuacao ul {
+            list-style: none;
+            padding: 20px;
+            margin: 10px;
+        }
+
+        #pontuacao ul li {
+            border: 3px solid #000;
+            padding: 5px;
+        }
+
+        #game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            background-color: green;
+        }
+
+        #premio {
+            height: 50px;
+            text-align: center;
+            color: red;
+            font-size: 3em;
+        }
+
+        
+
+        #ganho span {
+            width: 30px;            
+            text-align: center;
+            color: red;
+            font-size: 1em;
+        }
+
+        
+
+        .card {
+            width: 100px;
+            height: 140px;
+            border: 2px solid #000;
+            margin: 5px;
+            display: inline-block;
+            text-align: center;
+            line-height: 140px;
+            font-size: 24px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: 5px 6px 5px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 5px 6px 5px 0px rgba(0,0,0,0.75);
+            box-shadow: 5px 6px 5px 0px rgba(0,0,0,0.75);
+            background-color: #FFF;
+            cursor: pointer;
+        }
+
+        .card.hide {
+            display: none;
+        }
+
+        .card.selected {
+            opacity: 0.7;
+        }
+
+        #troca {
+            display: none;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .black {
+            color: black;
+        }
+
+        
+
+        
+
+        #deal {            
+            background-color: #0078d0;
+            border: 0;
+            border-radius: 56px;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: system-ui, -apple-system, system-ui, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            outline: 0;
+            padding: 16px 21px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            transition: all .3s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        #troca {            
+            background-color: #0078d0;
+            border: 0;
+            border-radius: 56px;
+            color: #fff;
+            cursor: pointer;            
+            font-family: system-ui, -apple-system, system-ui, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            outline: 0;
+            padding: 16px 21px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            transition: all .3s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+
+        #player-info {    
+            width: 100%;
+            height: 100px;        
+            background-image: url("https://img.freepik.com/free-photo/scratched-aluminum-texture-background_125540-937.jpg");
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #player-info div {            
+            margin: 0;
+            width: 25%;                         
+            text-align: center;
+            padding-top: 25px;               
+        }
+                
+        #creditos, #ganho {            
+            font-size: x-large;            
+        }
+
+        #credits {
+            font-size: xx-large;
+            font-weight: bolder;
+            color: RED;
+        }
+
+        #gain {
+            display: inline-block;
+            width: 200px;
+            font-size: xx-large;
+            font-weight: bolder;
+            color: RED;
+        }
+
+        #bet {
+            width: 50px;
+        }
+
+        #aposta {                        
+            font-size: x-large;            
+        }
+
+        @keyframes destaque {
+            0% { 
+                background-color: #FFF;
+                color: red;
+            }
+            25% {
+                background-color: red;
+                color: #FFF;
+            }
+            50% {
+                background-color: #FFF;
+                color: red;
+            }
+            75% {
+                background-color: red;
+                color: #FFF;            
+            }
+            100% {
+                background-color: #FFF;
+                color: red;
+            }
+        }
+
+        .win {
+            background-color: #FFF;            
+            color: red;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;            
+            background-color: #FFF;
+            cursor: pointer;
+            animation-name: destaque;
+            animation-duration: 3s;
+            -webkit-box-shadow: 5px 6px 5px 0px rgba(0,0,0,0.75);
+            -moz-box-shadow: 5px 6px 5px 0px rgba(0,0,0,0.75);
+            box-shadow: 5px 6px 5px 0px rgba(0,0,0,0.75);
+        }
+
+        
+
+
+    </style>
+    <title>Poker JS</title>
+</head>
+<body>
+    <H1>JS POKER</H1>
+    <div id="pontuacao">
+        <ul>
+            <li>FIGURATIVE PAIR ===> 1X </li>
+            <li>TWO PAIRS =========> 2X </li>
+            <li>THREE OF A KING ===> 3X </li>
+            <li>STRAIGHT ==========> 5X </li>
+        </ul>
+        <ul>
+            <li>FLUSH =============> 7X  </li>
+            <li>FULL HOUSE ========> 10X </li>
+            <li>FOUR ==============> 50X </li>
+            <li>STRAIGHT FLUSH ====> 200X</li>
+        </ul>
+    </div>
+    <div id="game-container">
+    </div>
+    <div id="premio"><span></span></div>
+    <div id="player-info">        
+        <div id="creditos">CREDITS: <span id="credits">100</span></div>
+        <div id="ganho">GAIN: <span id="gain"><strong></strong></span></div>         
+        <div>
+            <button id="deal" onclick="deal()">PLAY</button>
+            <button id="troca" onclick="trade()">TRADE</button> 
+        </div>
+        <div id="aposta">BET: <input type="number" id="bet" value="10" size="2px" /></div>
+    </div>
+
+    <script>
+
+    
+
+        let credits = 100;
+        let points = 0;
+        
+
+
+        function deal() {
+            $('#premio span').text('')
+            $('#ganho span strong').text('')            
+            let gain = 0;
+            $('#pontuacao ul li').removeClass('win'); 
+
+            // Array de cartas
+        const cards = [
+            { number: '2', suit: 'hearts' },
+            { number: '3', suit: 'hearts' },
+            { number: '4', suit: 'hearts' },
+            { number: '5', suit: 'hearts' },
+            { number: '6', suit: 'hearts' },
+            { number: '7', suit: 'hearts' },
+            { number: '8', suit: 'hearts' },
+            { number: '9', suit: 'hearts' },
+            { number: '10', suit: 'hearts' },
+            { number: 'J', suit: 'hearts' },
+            { number: 'Q', suit: 'hearts' },
+            { number: 'K', suit: 'hearts' },
+            { number: 'A', suit: 'hearts' },
+
+            { number: '2', suit: 'spades' },
+            { number: '3', suit: 'spades' },
+            { number: '4', suit: 'spades' },
+            { number: '5', suit: 'spades' },
+            { number: '6', suit: 'spades' },
+            { number: '7', suit: 'spades' },
+            { number: '8', suit: 'spades' },
+            { number: '9', suit: 'spades' },
+            { number: '10', suit: 'spades' },
+            { number: 'J', suit: 'spades' },
+            { number: 'Q', suit: 'spades' },
+            { number: 'K', suit: 'spades' },
+            { number: 'A', suit: 'spades' },
+            
+            { number: '2', suit: 'diamonds' },
+            { number: '3', suit: 'diamonds' },
+            { number: '4', suit: 'diamonds' },
+            { number: '5', suit: 'diamonds' },
+            { number: '6', suit: 'diamonds' },
+            { number: '7', suit: 'diamonds' },
+            { number: '8', suit: 'diamonds' },
+            { number: '9', suit: 'diamonds' },
+            { number: '10', suit: 'diamonds' },
+            { number: 'J', suit: 'diamonds' },
+            { number: 'Q', suit: 'diamonds' },
+            { number: 'K', suit: 'diamonds' },
+            { number: 'A', suit: 'diamonds' },
+
+            { number: '2', suit: 'clubs' },
+            { number: '3', suit: 'clubs' },
+            { number: '4', suit: 'clubs' },
+            { number: '5', suit: 'clubs' },
+            { number: '6', suit: 'clubs' },
+            { number: '7', suit: 'clubs' },
+            { number: '8', suit: 'clubs' },
+            { number: '9', suit: 'clubs' },
+            { number: '10', suit: 'clubs' },
+            { number: 'J', suit: 'clubs' },
+            { number: 'Q', suit: 'clubs' },
+            { number: 'K', suit: 'clubs' },
+            { number: 'A', suit: 'clubs' },
+            
+            
+        ];
+
+
+
+            if( credits > 0){
+
+                bet = document.getElementById('bet').value;
+
+                if(credits >= bet){
+                    updateCredits(-bet);
+                    //updatePoints(10); // Pontuação de exemplo, ajuste conforme necessário
+                    $(".card").remove(); 
+                    // Simulação de embaralhamento
+                    const shuffledCards1 = shuffle(cards);
+                    const shuffledCards2 = shuffle(shuffledCards1);
+                    const shuffledCards3 = shuffle(shuffledCards2);
+                    const shuffledCards4 = shuffle(shuffledCards3);
+                    const shuffledCards5 = shuffle(shuffledCards4);
+                    const shuffledCards = shuffle(shuffledCards5);
+                    
+
+                    // Distribui as 5 cartas para o jogador + 5 ocultas
+                    let x = 10;
+                    while (x>0){   
+                                        
+                            const playerCard = shuffledCards.pop(); 
+                        
+                            // Atualizar a interface do usuário                
+                            updateUI(playerCard);
+                                    
+                        x--;                
+                    }
+
+                    $('.card').slice(-5).addClass('hide')
+
+                    $("#deal").css("display", "none");
+                    $("#troca").css("display", "inline-block");
+                        
+                    $(".card" ).on("click", function() {
+                        count = $('.selected').length;
+                        
+                        if(count<5){                   
+                                
+                            if($( this ).is( ".selected" )){                        
+                                $(this).removeClass("selected");
+                                $(this).animate({marginTop: '+=95px'})
+                                s--; 
+                            }        
+                            else {
+                                if(count<4){
+                                    $(this).addClass("selected");
+                                    $(this).animate({marginTop: '-=95px'})
+                                    s++; 
+                                }
+                            }                                                         
+                        }
+                        
+                    });
+                }
+
+                else {
+                    alert("CRÉDITO INDISPONÍVEL, DIMINUA SUA APOSTA!")
+                }
+            }
+
+            else {
+                alert("PRECISA COLOCAR CRÉDITO PARA APOSTAR!!")
+            }
+
+        }
+
+        
+
+        function trade() {            
+            // troca as cartas selecioandas
+            $("#troca").css('display','none');
+            $(".card").unbind( "click" );
+            
+            $(".selected").each(function(){
+                $(this).remove()
+                $('.hide:first').css('display', 'block').removeClass('hide').animate({marginTop: '-=15px'})
+            })
+
+            $("#deal").css("display", "inline-block");
+
+            let n_selected = $(".card").length;       
+            
+            while(n_selected < 5){
+                const playerCard = shuffledCards.pop();                                                                    
+                // Atualizar a interface do usuário                
+                updateUI(playerCard);
+                n_selected++ 
+            }
+
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            let c1 = $('.card').first().text()
+            let numero1 = c1.charAt(0)            
+            let naipe1 = c1.at(-1)
+
+            let c2 = $('.card:eq(1)').text()
+            let numero2 = c2.charAt(0)            
+            let naipe2 = c2.at(-1)
+
+            let c3 = $('.card:eq(2)').text()
+            let numero3 = c3.charAt(0)            
+            let naipe3 = c3.at(-1)
+
+            let c4 = $('.card:eq(3)').text()
+            let numero4 = c4.charAt(0)            
+            let naipe4 = c4.at(-1)
+
+            let c5 = $('.card:eq(4)').text()
+            let numero5 = c5.charAt(0)            
+            let naipe5 = c5.at(-1)
+
+            
+
+            const cartas = [
+                { numero:numero1, naipe:naipe1},
+                { numero:numero2, naipe:naipe2},
+                { numero:numero3, naipe:naipe3},
+                { numero:numero4, naipe:naipe4},
+                { numero:numero5, naipe:naipe5}                
+            ]
+
+
+            $('#premio span').text(verificarJogo(cartas))
+
+
+            //animação dos textos do jogo e seu ganho
+            setInterval(function() {
+                $("#premio span").toggle()
+            },300);
+
+            setInterval(function() {
+                $("#ganho span strong").toggle()
+            },300);
+
+            
+
+            function verificarJogo(cartas) {   
+                
+                function verificarNaipes(cartas) {
+                    const primeiroNaipe = cartas[0].naipe;                    
+                    for (let i = 1; i < cartas.length; i++) {
+                        if (cartas[i].naipe !== primeiroNaipe) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                
+
+
+                // Verifica se todas as cartas têm o mesmo naipe
+                const mesmoNaipe = verificarNaipes(cartas)                
+
+                // Cria um objeto para contar a frequência de cada número
+                const frequenciaNumeros = {};
+                for (const carta of cartas) {
+                    frequenciaNumeros[carta.numero] = (frequenciaNumeros[carta.numero] || 0) + 1;
+                }
+
+                // Obtém os valores únicos de números
+                const numerosUnicos = Object.keys(frequenciaNumeros).map(numero => parseInt(numero)).sort((a, b) => a - b);
+
+                // Verifica se há uma sequência de números
+                const numerosOrdenados = numerosUnicos.slice().sort((a, b) => a - b);
+                const sequenciaNumeros = numerosOrdenados.length === 5 && numerosOrdenados[numerosOrdenados.length - 1] - numerosOrdenados[0] === 4;
+
+                ///////////////////////////////
+
+
+                const seqpossiveis = [['A', '2', '3', '4', '5'], ['2', '3', '4', '5', '6'], ['3', '4', '5', '6', '7'], ['4', '5', '6', '7', '8'], ['5', '6', '7', '8', '9'], ['6', '7', '8', '9', '1'], ['7', '8', '9', '1', 'J'],  ['8', '9', '1', 'J', 'Q'],  ['9', '1', 'J', 'Q', 'K'],  ['1', 'J', 'Q', 'K', 'A']]
+
+                const seq = [String(numero1), String(numero2), String(numero3), String(numero4), String(numero5)]
+                // cartas para teste da sequencia const seq = ['2', 'A', '5', '3', '4']
+                
+                
+                function verificarSequencia(seq, seqpossiveis) {
+                    // Função para verificar se um array contém todos os elementos de outro array, independentemente da ordem e considerando as ocorrências
+                    function contemTodosElementos(array1, array2) {
+                        const contagem1 = contagemElementos(array1);
+                        const contagem2 = contagemElementos(array2);
+
+                        for (const elemento in contagem1) {
+                            if (!(elemento in contagem2) || contagem2[elemento] < contagem1[elemento]) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+
+                    // Função para contar as ocorrências de cada elemento em um array
+                    function contagemElementos(array) {
+                        const contagem = {};
+                        for (const elemento of array) {
+                            contagem[elemento] = (contagem[elemento] || 0) + 1;
+                        }
+                        return contagem;
+                    }
+
+                    // Verifica se algum dos arrays em seqpossiveis contém todos os elementos de seq
+                    for (const arr of seqpossiveis) {
+                        if (contemTodosElementos(arr, seq)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+               let sequencia = verificarSequencia(seq, seqpossiveis)
+
+
+                //////////////////////////////
+
+
+                //**********************************************************************
+
+
+               function verificarParesFigurados(cartas) {
+                    const numeros = cartas.map(carta => carta.numero);
+                    const paresFigurados = ['J', 'Q', 'K'];
+
+                    for (const figura of paresFigurados) {
+                        const count = numeros.filter(numero => numero === figura).length;
+                        if (count >= 2) {
+                            return true; // Encontrou um par da figura especificada
+                        }
+                    }
+
+                    return false; // Não encontrou nenhum par de J, Q ou K
+                }
+
+
+
+
+               
+
+                
+
+                gain = parseInt(bet)
+                // Verifica se há um jogo de poker
+                if (mesmoNaipe && verificarSequencia(seq, seqpossiveis)) {
+                    if (numerosOrdenados[0] === 10) {
+                        gain = gain*300
+                        updatePoints(gain);
+                        updateCredits(gain);
+                        //$('#pontuacao ul li:eq(8)').addClass('win')
+                        return "Royal Straight Flush";
+                    } else {
+                        gain = gain*200
+                        updatePoints(gain);
+                        updateCredits(gain);
+                        $('#pontuacao ul li:eq(7)').addClass('win')
+                        return "Straight Flush";
+                    }
+
+                } else if (Object.values(frequenciaNumeros).includes(4)) {
+                    gain = gain*50
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(6)').addClass('win')
+                    return "Four of a Kind";
+
+                } else if (Object.values(frequenciaNumeros).includes(3) && Object.values(frequenciaNumeros).includes(2)) {
+                    gain = gain*10
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(5)').addClass('win')
+                    return "Full House";
+
+                } else if (mesmoNaipe) {
+                    gain = gain*7
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(4)').addClass('win')
+                    return "Flush";
+
+                } else if (verificarSequencia(seq, seqpossiveis)) {
+                    gain = gain*5
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(3)').addClass('win')
+                    return "Straight";
+
+                } else if (Object.values(frequenciaNumeros).includes(3)) {
+                    gain = gain*3
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(2)').addClass('win')
+                    return "Three of a Kind";                    
+
+                } else if (Object.values(frequenciaNumeros).filter(freq => freq === 2).length === 2) {                    
+                    gain = gain*2
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(1)').addClass('win')
+                    return "Two Pairs";
+
+                } else if (verificarParesFigurados(cartas)) {                    
+                    gain = gain*1
+                    updatePoints(gain);
+                    updateCredits(gain);
+                    $('#pontuacao ul li:eq(0)').addClass('win')
+                    return "Figurative Pair";
+
+                } else {
+                    return "PERDEU!";
+                }
+            }
+
+
+
+
+            /////////////////////////////////////////////////////////////////////////////////////////////
+
+        }
+
+        function updateCredits(amount) {
+            credits += amount;
+            document.getElementById('credits').textContent = credits;
+        }
+
+        function updatePoints(amount) {
+            points = amount;
+            $('#gain strong').text(points);
+        }
+
+        function updateUI(card) {
+            const gameContainer = document.getElementById('game-container');
+            const cardElement = document.createElement('div');
+            cardElement.textContent = `${card.number} ${getSuitSymbol(card.suit)}`;
+            let naipe =  `${card.number} ${getSuitSymbol(card.suit)}`                     
+            cardElement.classList.add('card', 'naipe', card.suit === 'hearts' || card.suit === 'diamonds' ? 'red' : 'black' );
+                        
+            gameContainer.appendChild(cardElement);            
+        }
+
+        function getSuitSymbol(suit) {
+            switch (suit) {
+                case 'hearts':
+                    return '♥';
+                case 'diamonds':
+                    return '♦';
+                case 'clubs':
+                    return '♣';
+                case 'spades':
+                    return '♠';
+                default:
+                    return '';
+            }
+        }
+
+        // Função de embaralhamento 
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+
+            return array;
+        }
+
+
+
+        
+
+
+
+    </script>
+
+<!--<iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1715263278&color=%2337e478&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/relaxcafemusic" title="Relax Cafe Music BGM" target="_blank" style="color: #cccccc; text-decoration: none;">Relax Cafe Music BGM</a> · <a href="https://soundcloud.com/relaxcafemusic/sets/jazz-for-work" title="Jazz For Work" target="_blank" style="color: #cccccc; text-decoration: none;">Jazz For Work</a></div></html>
